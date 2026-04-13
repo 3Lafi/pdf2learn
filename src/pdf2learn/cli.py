@@ -27,9 +27,8 @@ def _version_callback(value: bool) -> None:
         raise typer.Exit(code=0)
 
 
-@app.callback(invoke_without_command=True)
+@app.command()
 def main(
-    ctx: typer.Context,
     input: Path = typer.Argument(
         ...,
         exists=False,
@@ -73,9 +72,6 @@ def main(
         help="Show version and exit.",
     ),
 ) -> None:
-    if ctx.invoked_subcommand is not None:
-        return
-
     config = load_config(config_path)
     config.output_root = output_dir
     config.recursive = recursive
