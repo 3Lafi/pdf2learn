@@ -59,7 +59,7 @@ def stub_extract(monkeypatch: pytest.MonkeyPatch, canned_content: ExtractedConte
     """
     calls: list[dict] = []
 
-    def _stub(pdf_path: Path, *, asset_dir: Path, image_only_text_threshold: int = 200, **_kw) -> ExtractedContent:
+    def _stub(pdf_path: Path, *, asset_dir: Path, **_kw) -> ExtractedContent:
         calls.append({"pdf_path": pdf_path, "asset_dir": asset_dir})
         asset_dir.mkdir(parents=True, exist_ok=True)
         return canned_content

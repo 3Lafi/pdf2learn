@@ -22,6 +22,11 @@ class Config:
     # image-only and the run fails with exit code 3 (FR-015 / R9).
     image_only_text_threshold: int = 200
 
+    # Extraction engine: "docling" (CPU default) or "marker" (GPU-friendly).
+    engine: str = "docling"
+    # Quality preset for docling: "fast" | "rich" | "scanned" (auto-upgrades).
+    quality: str = "rich"
+
     extra: dict = field(default_factory=dict)
 
 
@@ -62,6 +67,10 @@ def _load_from_file(path: Path) -> Config:
         cfg.quiet = bool(raw["quiet"])
     if "image_only_text_threshold" in raw:
         cfg.image_only_text_threshold = int(raw["image_only_text_threshold"])
+    if "engine" in raw:
+        cfg.engine = str(raw["engine"]).lower()
+    if "quality" in raw:
+        cfg.quality = str(raw["quality"]).lower()
 
     known = {
         "output_root",
@@ -69,6 +78,8 @@ def _load_from_file(path: Path) -> Config:
         "force",
         "quiet",
         "image_only_text_threshold",
+        "engine",
+        "quality",
     }
     cfg.extra = {k: v for k, v in raw.items() if k not in known}
     return cfg

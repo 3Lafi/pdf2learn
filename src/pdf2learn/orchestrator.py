@@ -12,13 +12,38 @@ from datetime import datetime
 from pathlib import Path
 
 from .config import Config
-from .extract.marker_engine import ExtractionError, ImageOnlyPDFError, extract
+from .extract.marker_engine import ExtractionError, ImageOnlyPDFError
 from .logging_ import job_logging
 from .models import ConversionJob
 from .paths import resolve_output_dir
 from .render.renderer import render
 
 log = logging.getLogger("pdf2learn")
+
+
+def extract(pdf_path: Path, *, config: Config, asset_dir: Path) -> "ExtractedContent":  # type: ignore[name-defined]
+    """Engine-dispatching extraction facade.
+
+    Tests monkeypatch this symbol (``pdf2learn.orchestrator.extract``) so
+    batch/integration tests don't require the real extraction backend.
+    """
+    engine = (config.engine or "docling").lower()
+    if engine == "docling":
+        from .extract.docling_engine import extract as _extract
+        return _extract(
+            pdf_path,
+            asset_dir=asset_dir,
+            image_only_text_threshold=config.image_only_text_threshold,
+            quality=config.quality,
+        )
+    if engine == "marker":
+        from .extract.marker_engine import extract as _extract
+        return _extract(
+            pdf_path,
+            asset_dir=asset_dir,
+            image_only_text_threshold=config.image_only_text_threshold,
+        )
+    raise ValueError(f"unknown engine {engine!r}; pick 'docling' or 'marker'")
 
 
 def iter_pdfs(input_path: Path, *, recursive: bool) -> list[Path]:
@@ -66,8 +91,8 @@ def run_job(pdf_path: Path, *, config: Config) -> ConversionJob:
         try:
             content = extract(
                 pdf_path,
+                config=config,
                 asset_dir=output_dir / "assets",
-                image_only_text_threshold=config.image_only_text_threshold,
             )
             logger.info(
                 "%d page(s), %d figure(s), %d section(s)",

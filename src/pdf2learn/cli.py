@@ -58,6 +58,17 @@ def main(
         "-q",
         help="Suppress stdout progress lines (conversion.log still written).",
     ),
+    engine: str = typer.Option(
+        "docling",
+        "--engine",
+        "-e",
+        help="Extraction backend: 'docling' (CPU default) or 'marker' (GPU).",
+    ),
+    quality: str = typer.Option(
+        "rich",
+        "--quality",
+        help="docling preset: 'fast' | 'rich' | 'scanned'. Auto-upgrades on image-only PDFs.",
+    ),
     config_path: Path | None = typer.Option(
         None,
         "--config",
@@ -77,6 +88,8 @@ def main(
     config.recursive = recursive
     config.force = force
     config.quiet = quiet
+    config.engine = engine
+    config.quality = quality
 
     try:
         pdfs = iter_pdfs(input, recursive=recursive)
