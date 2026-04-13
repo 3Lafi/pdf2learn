@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+    <header class="doc-header">
+        <h1 class="doc-title">{{ title }}</h1>
+        <button id="theme-toggle" type="button" aria-label="Toggle color theme" hidden>Theme</button>
+    </header>
+
+    {% if toc %}
+    <nav class="doc-toc" aria-label="Table of contents">
+        <h2>Contents</h2>
+        <ol>
+            {% for entry in toc %}
+            <li class="toc-level-{{ entry.level }}"><a href="#{{ entry.id }}">{{ entry.heading }}</a></li>
+            {% endfor %}
+        </ol>
+    </nav>
+    {% endif %}
+
+    <main class="doc-body">
+        {% for section in content.sections %}
+        <section id="{{ section.id }}" class="doc-section" data-level="{{ section.level }}">
+            {% if section.heading %}
+            {% set h = 'h' ~ ([section.level, 6] | min) %}
+            <{{ h }}>{{ section.heading }}</{{ h }}>
+            {% endif %}
+
+            {% for block in section.blocks %}
+                {% include 'partials/block.html.j2' %}
+            {% endfor %}
+        </section>
+        {% endfor %}
+    </main>
+
+    <script src="assets/toggle.js" defer></script>
+</body>
+</html>

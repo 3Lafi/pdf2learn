@@ -1,0 +1,37 @@
+{%- set cls = block.__class__.__name__ -%}
+{%- if cls == 'ParagraphBlock' -%}
+<p>{{ block.text }}</p>
+{%- elif cls == 'ListBlock' -%}
+    {%- if block.ordered -%}
+    <ol>
+        {%- for item in block.items -%}<li>{{ item }}</li>{%- endfor -%}
+    </ol>
+    {%- else -%}
+    <ul>
+        {%- for item in block.items -%}<li>{{ item }}</li>{%- endfor -%}
+    </ul>
+    {%- endif -%}
+{%- elif cls == 'CodeBlock' -%}
+<pre><code{% if block.language %} data-lang="{{ block.language }}" class="language-{{ block.language }}"{% endif %}>{{ block.code }}</code></pre>
+{%- elif cls == 'TableBlock' -%}
+<table>
+    {%- if block.header -%}
+    <thead><tr>{%- for c in block.header -%}<th>{{ c }}</th>{%- endfor -%}</tr></thead>
+    {%- endif -%}
+    <tbody>
+        {%- for row in block.rows -%}
+        <tr>{%- for c in row -%}<td>{{ c }}</td>{%- endfor -%}</tr>
+        {%- endfor -%}
+    </tbody>
+</table>
+{%- elif cls == 'MathBlock' -%}
+<div class="math-display">\[{{ block.latex }}\]</div>
+{%- elif cls == 'FigureRef' -%}
+    {%- set rel = figure_rel.get(block.figure_id) -%}
+    {%- if rel -%}
+<figure id="{{ block.figure_id }}">
+    <img src="{{ rel }}" alt="{{ block.caption or block.figure_id }}">
+    {%- if block.caption -%}<figcaption>{{ block.caption }}</figcaption>{%- endif -%}
+</figure>
+    {%- endif -%}
+{%- endif -%}

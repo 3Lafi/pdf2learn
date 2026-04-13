@@ -1,0 +1,92 @@
+/* pdf2learn — minimal scaffolding. Full learning-optimized design lands in Phase 7 (US5). */
+
+:root {
+    --fg: #1a1a1a;
+    --bg: #fdfdfc;
+    --accent: #2b5cc4;
+    --muted: #666;
+    --rule: #e4e4e1;
+    --code-bg: #f4f4f2;
+    color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --fg: #e8e8e8;
+        --bg: #141414;
+        --accent: #7aa8ff;
+        --muted: #9a9a9a;
+        --rule: #2a2a2a;
+        --code-bg: #1e1e1e;
+    }
+}
+
+html[data-theme="dark"] {
+    --fg: #e8e8e8;
+    --bg: #141414;
+    --accent: #7aa8ff;
+    --muted: #9a9a9a;
+    --rule: #2a2a2a;
+    --code-bg: #1e1e1e;
+}
+
+html[data-theme="light"] {
+    --fg: #1a1a1a;
+    --bg: #fdfdfc;
+    --accent: #2b5cc4;
+    --muted: #666;
+    --rule: #e4e4e1;
+    --code-bg: #f4f4f2;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    color: var(--fg);
+    background: var(--bg);
+    font-family: ui-serif, Georgia, 'Times New Roman', serif;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.doc-header,
+.doc-toc,
+.doc-body {
+    max-width: 72ch;
+    margin: 0 auto;
+    padding: 1.25rem 1.5rem;
+}
+
+.doc-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--rule);
+}
+
+.doc-title { margin: 0; font-size: 1.75rem; }
+
+.doc-toc ol { padding-left: 1.25rem; }
+.doc-toc a { color: var(--accent); text-decoration: none; }
+.doc-toc a:hover { text-decoration: underline; }
+.toc-level-1 { font-weight: 600; }
+.toc-level-3, .toc-level-4, .toc-level-5, .toc-level-6 { padding-left: 1rem; }
+
+h1, h2, h3, h4, h5, h6 { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; }
+
+pre, code { font-family: ui-monospace, 'Cascadia Code', Consolas, monospace; }
+pre { background: var(--code-bg); padding: 0.75rem 1rem; border-radius: 6px; overflow-x: auto; }
+
+figure { margin: 1.5rem 0; text-align: center; }
+figure img { max-width: 100%; height: auto; }
+figcaption { color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; }
+
+table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+th, td { border: 1px solid var(--rule); padding: 0.5rem 0.75rem; text-align: left; }
+thead { background: var(--code-bg); }
+
+@media print {
+    #theme-toggle { display: none !important; }
+    .doc-header, .doc-toc, .doc-body { max-width: none; }
+    a { color: inherit; text-decoration: none; }
+}
