@@ -59,15 +59,15 @@ def main(
         help="Suppress stdout progress lines (conversion.log still written).",
     ),
     engine: str = typer.Option(
-        "docling",
+        "llamaparse",
         "--engine",
         "-e",
-        help="Extraction backend: 'docling' (CPU default) or 'marker' (GPU).",
+        help="Backend: 'llamaparse' (hosted API, default), 'docling' (CPU), 'marker' (GPU).",
     ),
     quality: str = typer.Option(
-        "rich",
+        "cost_effective",
         "--quality",
-        help="docling preset: 'fast' | 'rich' | 'scanned'. Auto-upgrades on image-only PDFs.",
+        help="llamaparse: fast|cost_effective|agentic|agentic_plus. docling: fast|rich|scanned.",
     ),
     config_path: Path | None = typer.Option(
         None,

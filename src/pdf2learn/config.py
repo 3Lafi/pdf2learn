@@ -22,10 +22,11 @@ class Config:
     # image-only and the run fails with exit code 3 (FR-015 / R9).
     image_only_text_threshold: int = 200
 
-    # Extraction engine: "docling" (CPU default) or "marker" (GPU-friendly).
-    engine: str = "docling"
-    # Quality preset for docling: "fast" | "rich" | "scanned" (auto-upgrades).
-    quality: str = "rich"
+    # Extraction engine: "llamaparse" (hosted API, default), "docling" (CPU), "marker" (GPU).
+    engine: str = "llamaparse"
+    # Quality / parse mode. For llamaparse: fast|cost_effective|agentic|agentic_plus.
+    # For docling: fast|rich|scanned. Default is tuned for llamaparse.
+    quality: str = "cost_effective"
 
     extra: dict = field(default_factory=dict)
 

@@ -23,7 +23,7 @@ classifiers = [
     "Topic :: Text Processing :: Markup :: HTML",
 ]
 dependencies = [
-    "docling>=2.0",
+    "llama-cloud-services>=0.6",
     "jinja2>=3.1",
     "typer>=0.12",
     "rich>=13.0",
@@ -32,6 +32,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+docling = [
+    "docling>=2.0",
+]
 marker = [
     "marker-pdf>=0.2",
 ]

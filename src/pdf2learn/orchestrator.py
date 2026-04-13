@@ -27,7 +27,15 @@ def extract(pdf_path: Path, *, config: Config, asset_dir: Path) -> "ExtractedCon
     Tests monkeypatch this symbol (``pdf2learn.orchestrator.extract``) so
     batch/integration tests don't require the real extraction backend.
     """
-    engine = (config.engine or "docling").lower()
+    engine = (config.engine or "llamaparse").lower()
+    if engine == "llamaparse":
+        from .extract.llamaparse_engine import extract as _extract
+        return _extract(
+            pdf_path,
+            asset_dir=asset_dir,
+            image_only_text_threshold=config.image_only_text_threshold,
+            mode=config.quality if config.quality in {"fast", "cost_effective", "agentic", "agentic_plus"} else "cost_effective",
+        )
     if engine == "docling":
         from .extract.docling_engine import extract as _extract
         return _extract(
@@ -43,7 +51,7 @@ def extract(pdf_path: Path, *, config: Config, asset_dir: Path) -> "ExtractedCon
             asset_dir=asset_dir,
             image_only_text_threshold=config.image_only_text_threshold,
         )
-    raise ValueError(f"unknown engine {engine!r}; pick 'docling' or 'marker'")
+    raise ValueError(f"unknown engine {engine!r}; pick 'llamaparse', 'docling', or 'marker'")
 
 
 def iter_pdfs(input_path: Path, *, recursive: bool) -> list[Path]:
